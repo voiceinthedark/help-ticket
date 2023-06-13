@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'avatar', # add avatar to mass assignment
         'password',
     ];
 
