@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::patch('/profile/avatar', [AvatarController::class, 'update'])->name('profile.avatar');
+
+    Route::post('profile/avatar', [AvatarController::class, 'generate'])->name('profile.generate');
 });
 
 require __DIR__.'/auth.php';

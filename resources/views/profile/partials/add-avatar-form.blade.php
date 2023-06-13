@@ -9,12 +9,24 @@
         </p>
     </header>
 
+    <div class="mt-6 flex items-center gap-6">
+         <img src="{{ url($user->avatar) }}" class="rounded-full w-20 h-20" alt="Avatar" srcset="{{ $user->avatar }}">
+    </div>
+
+    <form action="{{ route('profile.generate') }}" class="mt-6 space-y-6" method="post">
+        @csrf
+        {{-- @method('patch') --}}
+
+        <div class="flex items-center gap-4">
+            <x-primary-button>{{ __('Generate Avatar') }}</x-primary-button>
+        </div>
+    </form>
+
+    <p class="mt-6 text-base text-gray-600 dark:text-gray-400">{{ __("Or Upload a new Avatar") }}</p>
+
     <form method="post" action="{{ route('profile.avatar') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
-
-        <img src="{{ url($user->avatar) }}" class="rounded-full w-20 h-20" alt="Avatar" srcset="{{ $user->avatar }}">
-
 
         <div>
             <x-input-label for="avatar" :value="__('Avatar')" />
