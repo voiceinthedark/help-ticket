@@ -13,9 +13,8 @@
         @csrf
         @method('patch')
 
-        @if (session('avatar'))
-            <span class="block text-sm font-medium text-green-600">{{ session('avatar') }}</span>
-        @endif
+        <img src="{{ url($user->avatar) }}" class="rounded-full w-20 h-20" alt="Avatar" srcset="{{ $user->avatar }}">
+
 
         <div>
             <x-input-label for="avatar" :value="__('Avatar')" />
