@@ -5,6 +5,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    @include('auth/login-google')
     @include('auth/login-github')
 
     <form method="POST" action="{{ route('login') }}">

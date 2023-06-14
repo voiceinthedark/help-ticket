@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::post('profile/avatar', [AvatarController::class, 'generate'])->name('profile.generate');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Route::get('/auth/redirect', function () {
     return Socialite::driver('github')->redirect();
@@ -50,11 +50,31 @@ Route::get('/auth/callback', function () {
         'email' => $githubUser->email,
     ], [
         'name' => $githubUser->name,
-        'email' => $githubUser->email,
         'password' => 'password123',
     ]);
 
     Auth::login($user);
 
+    return redirect('/dashboard');
+});
+
+Route::get('/auth/google/redirect', function () {
+    return Socialite::driver('google')->redirect();
+})->name('login.google');
+
+Route::get('/auth/google/callback', function () {
+    $googleUser = Socialite::driver('google')->user();
+    // dd($googleUser->attributes['avatar']);
+
+    $user = User::firstOrCreate(
+        ['email' => $googleUser->email],
+        [
+            'name' => $googleUser->name,
+            'password' => 'password123',
+            'avatar' => $googleUser->attributes['avatar'],
+        ]
+    );
+
+    Auth::login($user);
     return redirect('/dashboard');
 });
