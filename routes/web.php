@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\AvatarController;
+use App\Http\Controllers\LoginGithubController;
+use App\Http\Controllers\LoginGoogleController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
-use Laravel\Socialite\Facades\Socialite;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,43 +38,15 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::get('/auth/redirect', function () {
-    return Socialite::driver('github')->redirect();
-})->name('login.github');
+Route::get('/auth/redirect', [LoginGithubController::class, 'redirect'])->name('login.github');
 
-Route::get('/auth/callback', function () {
-    $githubUser = Socialite::driver('github')->user();
+Route::get('/auth/callback', [LoginGithubController::class, 'callback']);
 
+Route::get('/auth/google/redirect', [LoginGoogleController::class, 'redirect'])->name('login.google');
 
-    $user = User::firstOrCreate([
-        'email' => $githubUser->email,
-    ], [
-        'name' => $githubUser->name,
-        'password' => 'password123',
-    ]);
+Route::get('/auth/google/callback', [LoginGoogleController::class, 'callback']);
 
-    Auth::login($user);
+Route::middleware('auth')->group(function () {
+    Route::get('/ticket/create', [TicketController::class, 'create']);
 
-    return redirect('/dashboard');
-});
-
-Route::get('/auth/google/redirect', function () {
-    return Socialite::driver('google')->redirect();
-})->name('login.google');
-
-Route::get('/auth/google/callback', function () {
-    $googleUser = Socialite::driver('google')->user();
-    // dd($googleUser->attributes['avatar']);
-
-    $user = User::firstOrCreate(
-        ['email' => $googleUser->email],
-        [
-            'name' => $googleUser->name,
-            'password' => 'password123',
-            'avatar' => $googleUser->attributes['avatar'],
-        ]
-    );
-
-    Auth::login($user);
-    return redirect('/dashboard');
 });
