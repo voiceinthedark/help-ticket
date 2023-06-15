@@ -11,7 +11,7 @@ class UpdateTicketRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,8 +22,9 @@ class UpdateTicketRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-
+            'attachment' => ['nullable', 'file', 'mimes:pdf,doc,docx,txt,rtf,zip,rar,7z,xz,gz,png,jpg,jpeg,gif', 'max:2048'],
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Models\Ticket;
 use App\Models\User;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
@@ -43,18 +44,7 @@ class TicketController extends Controller
         ]);
 
         if($request->file('attachment')){
-            // Get file extension
-            $extension = $request->file('attachment')->extension();
-            // Generate file name
-            $fileName = time().'.'.$extension;
-            // Get file contents
-            $fileContents = $request->file('attachment')->get();
-            // Save file
-            $path = "attachments/".$fileName;
-            Storage::disk('public')->put($path, $fileContents);
-            $ticket->update([
-                'attachment' => $path
-            ]);
+            $this->updateAttachment($request, $ticket);
         }
 
         return response()->redirectTo(route('ticket.index'));
@@ -73,7 +63,9 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        //
+        return view('ticket.edit', [
+            'ticket' => $ticket,
+        ])->with('ticket', $ticket);
     }
 
     /**
@@ -81,7 +73,16 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        //
+        $ticket->update([
+            'title' => $request->title,
+            'description' => $request->description,
+        ]);
+
+        if($request->attachment){
+            $this->updateAttachment($request, $ticket);
+        }
+
+        return response()->redirectTo(route('ticket.index'));
     }
 
     /**
@@ -90,5 +91,21 @@ class TicketController extends Controller
     public function destroy(Ticket $ticket)
     {
         //
+    }
+
+    private function updateAttachment(FormRequest $request, Ticket $ticket): void
+    {
+        // Get file extension
+        $extension = $request->file('attachment')->extension();
+        // Generate file name
+        $fileName = time() . '.' . $extension;
+        // Get file contents
+        $fileContents = $request->file('attachment')->get();
+        // Save file
+        $path = "attachments/" . $fileName;
+        Storage::disk('public')->put($path, $fileContents);
+        $ticket->update([
+            'attachment' => $path
+        ]);
     }
 }
