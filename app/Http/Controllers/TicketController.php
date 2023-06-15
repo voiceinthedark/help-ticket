@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
@@ -14,7 +15,12 @@ class TicketController extends Controller
      */
     public function index()
     {
-        return view('ticket.index');
+        return view('ticket.index', [
+            // Get the tickets where the user_i is equal to the current user id
+            'tickets' => Ticket::where('user_id', auth()->user()->id)->get(),
+            // Return the current user
+            'user' => auth()->user(),
+        ]);
     }
 
     /**
@@ -51,7 +57,7 @@ class TicketController extends Controller
             ]);
         }
 
-        return response()->redirect(route('ticket.index'));
+        return response()->redirectTo(route('ticket.index'));
     }
 
     /**
