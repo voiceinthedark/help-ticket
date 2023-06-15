@@ -2,7 +2,7 @@
         @csrf
 
         <x-primary-button
-            class="py-2 px-4 flex justify-center items-center  bg-stone-50 hover:bg-stone-200 focus:ring-gray-500 focus:ring-offset-gray-200 text-black w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+            class="py-2 px-4 flex mt-5 justify-center items-center mb-4 bg-slate-700 hover:bg-slate-500 focus:ring-gray-500 focus:ring-offset-gray-200 text-black w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="mr-2"
                 viewBox="0 0 1792 1792">
                 <path
