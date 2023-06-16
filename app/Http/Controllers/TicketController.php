@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTicketRequest;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
@@ -73,16 +74,24 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        $ticket->update([
-            'title' => $request->title,
-            'description' => $request->description,
-        ]);
+        // Get the response from TicketPolicy
+        $response = Gate::inspect('update', $ticket);
+        if($response->allowed()){
+            $ticket->update([
+                'title' => $request->title,
+                'description' => $request->description,
+            ]);
 
-        if($request->attachment){
-            $this->updateAttachment($request, $ticket);
+            if ($request->attachment) {
+                $this->updateAttachment($request, $ticket);
+            }
+
+            return response()->redirectTo(route('ticket.index'));
+        } else {
+            return view('errors.403');
         }
 
-        return response()->redirectTo(route('ticket.index'));
+
     }
 
     /**
