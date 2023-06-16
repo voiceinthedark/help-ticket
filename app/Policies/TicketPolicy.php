@@ -13,7 +13,7 @@ class TicketPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return $user->id == auth()->user()->id;
     }
 
     /**
@@ -21,7 +21,7 @@ class TicketPolicy
      */
     public function view(User $user, Ticket $ticket): bool
     {
-        return $user->id === $ticket->user_id;
+        return $user->id == $ticket->user_id;
     }
 
     /**
@@ -29,7 +29,7 @@ class TicketPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return true;
     }
 
     /**
@@ -39,7 +39,7 @@ class TicketPolicy
     {
         return $user->id === $ticket->user_id ?
             Response::allow() :
-            Response::denyAsNotFound();
+            Response::denyWithStatus(403);
 
     }
 
@@ -48,7 +48,7 @@ class TicketPolicy
      */
     public function delete(User $user, Ticket $ticket): bool
     {
-        //
+        return $user->id === $ticket->user_id;
     }
 
     /**

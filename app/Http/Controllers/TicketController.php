@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
 {
+
+    public function __construct() {
+        $this->authorizeResource(Ticket::class, 'ticket');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -75,8 +80,8 @@ class TicketController extends Controller
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
         // Get the response from TicketPolicy
-        $response = Gate::inspect('update', $ticket);
-        if($response->allowed()){
+        // $response = Gate::inspect('update', $ticket);
+        // if($response->allowed()){
             $ticket->update([
                 'title' => $request->title,
                 'description' => $request->description,
@@ -87,9 +92,9 @@ class TicketController extends Controller
             }
 
             return response()->redirectTo(route('ticket.index'));
-        } else {
-            return view('errors.403');
-        }
+        // } else {
+        //     return view('errors.403');
+        // }
 
 
     }
@@ -99,7 +104,15 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket)
     {
-        //
+        // Check if user is allowed to delete the ticket
+        $response = Gate::inspect('delete', $ticket);
+        if($response->allowed()){
+            // Delete the ticket
+            $ticket->delete();
+        } else {
+            return view('errors.403');
+        }
+        return response()->redirectTo(route('ticket.index'));
     }
 
     private function updateAttachment(FormRequest $request, Ticket $ticket): void

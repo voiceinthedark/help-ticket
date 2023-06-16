@@ -35,4 +35,6 @@
         </div>
     </form>
 
+    @include('ticket.partials.ticket-delete-form')
+
 </x-app-layout>
