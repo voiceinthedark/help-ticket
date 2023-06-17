@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\Debugbar\Facade as Debugbar;
 
 class TicketController extends Controller
 {
@@ -61,7 +62,9 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        //
+        return view('ticket.view', [
+            'ticket' => $ticket,
+        ]);
     }
 
     /**
@@ -113,6 +116,14 @@ class TicketController extends Controller
             return view('errors.403');
         }
         return response()->redirectTo(route('ticket.index'));
+    }
+
+    public function download(Ticket $ticket){
+        // TODO: Implement download() method.
+        // Debugbar::message("Download ticket {$ticket->id}");
+        $file = Storage::path($ticket);
+        dd($file);
+        return Storage::download($ticket->attachment);
     }
 
     private function updateAttachment(FormRequest $request, Ticket $ticket): void

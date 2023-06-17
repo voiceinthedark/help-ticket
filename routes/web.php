@@ -49,4 +49,5 @@ Route::get('/auth/google/callback', [LoginGoogleController::class, 'callback']);
 // Add Ticket middleware request methods
 Route::middleware('auth')->group(function () {
     Route::resource('ticket', TicketController::class);
+    Route::get('ticket/get/{attachment}', [TicketController::class, 'download'])->name('ticket.get');
 });
