@@ -63,6 +63,7 @@ class TicketController extends Controller
     public function show(Ticket $ticket)
     {
         return view('ticket.view', [
+            'user' => auth()->user(),
             'ticket' => $ticket,
         ]);
     }

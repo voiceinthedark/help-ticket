@@ -3,14 +3,11 @@
 <div {!! $attributes->merge(['class' => 'flex flex-col py-6 items-center justify-center']) !!}>
     <ul class="flex flex-col w-5/12">
         @foreach ($tickets as $ticket)
-            <li class="flex flex-row mb-2 border-gray-400">
+            <li class="flex flex-row mb-2 border-gray-400 h-44">
                 <div
                     class="cursor-pointer bg-white dark:bg-gray-800 rounded-md flex flex-1 items-center justify-start p-4">
-                    <div class="flex flex-col items-center justify-center w-10 h-10 mr-4">
-                        <a href="#" class="relative block">
-                            <img alt="profil" src="{{ $user->avatar }}"
-                                class="mx-auto object-cover rounded-full h-10 w-10 " />
-                        </a>
+                    <div class="flex flex-col items-center justify-center w-12 h-12 mr-4">
+                        <x-avatar :user="$user" />
                     </div>
                     <div class="flex-1 pl-1 md:mr-16">
                         <div class="font-medium dark:text-white">
